@@ -5,6 +5,7 @@ from model_part import fc
 from decision_rand import DecisionPolicy
 from model import mlp
 import random
+from tensorflow.python.platform import gfile
 
 class QLearningDecisionPolicy(DecisionPolicy):
     def __init__(self, actions, input_dim):
@@ -41,6 +42,9 @@ class QLearningDecisionPolicy(DecisionPolicy):
         init_op = tf.initialize_all_variables()
         self.sess.run(init_op)
 
+        # saver
+        self.saver = tf.train.Saver(tf.trainable_variables())
+
     def select_action(self, current_state, step):
         threshold = min(self.epsilon, step/1000.)
 
@@ -69,4 +73,11 @@ class QLearningDecisionPolicy(DecisionPolicy):
 
         # train
         self.sess.run(self.train_op, feed_dict={self.x: state, self.y: action_q_vals})
+
+    def save_model(self, output_dir, step):
+        if not gfile.Exists(output_dir):
+            gfile.MakeDirs(output_dir)
+
+        checkpoint_path = output_dir + '/model.ckpt'
+        self.saver.save(self.sess, checkpoint_path, global_step=step)
 

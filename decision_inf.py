@@ -10,3 +10,6 @@ class DecisionPolicy:
 
     def update_q(self, state, action, reward, next_state):
         pass
+
+    def save_model(self, output_dir):
+        pass

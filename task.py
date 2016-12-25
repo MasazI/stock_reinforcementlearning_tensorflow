@@ -16,7 +16,7 @@ def run_simu(policy, initial_budget, initial_num_stocks, prices, hist, debug=Fal
     transition = list()
 
     for i in xrange(len(prices) - hist - 1):
-        if i % 100 == 0:
+        if i % 100 == 0 and debug:
             print('progress {:.2f}%'.format(float(100 * i) / (len(prices) - hist - 1)))
         # the state is a hist+2 dim vector
         current_state = np.asmatrix(np.hstack((prices[i:i+hist], budget, num_stocks)))
@@ -56,18 +56,17 @@ def run_simu(policy, initial_budget, initial_num_stocks, prices, hist, debug=Fal
     # compute final portfolio worth
     portfolio = budget + num_stocks * share_value
 
-    if debug:
-        print('${}\t{} shares'.format(budget, num_stocks))
+    print('${}\t{} shares'.format(budget, num_stocks))
 
     return portfolio
 
 
-def run_simus(policy, budget, num_stocks, prices, hist):
-    num_tries = 50
+def run_simus(policy, budget, num_stocks, prices, hist, num_tries):
     final_portofolios = list()
 
     for i in xrange(num_tries):
-        final_portofolio = run_simu(policy, budget, num_stocks, prices, hist, True)
+        print("simuration no.%d" % (i))
+        final_portofolio = run_simu(policy, budget, num_stocks, prices, hist, False)
         final_portofolios.append(final_portofolio)
     avg, std = np.mean(final_portofolios), np.std(final_portofolios)
     return avg, std
@@ -87,6 +86,8 @@ if __name__ == '__main__':
 
     budget = 1000.0
     num_stocks = 0
-    avg, std = run_simus(policy, budget, num_stocks, prices, hist)
-    print(avg, std)
+    num_tries = 50
+    avg, std = run_simus(policy, budget, num_stocks, prices, hist, num_tries)
+    policy.save_model("train", num_tries)
+    print("portfolio avg: %f, std: %f" % (avg, std))
     print("[training] finish")
