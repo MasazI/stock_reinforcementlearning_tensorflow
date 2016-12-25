@@ -54,7 +54,7 @@ def run_simu(policy, initial_budget, initial_num_stocks, prices, hist, debug=Fal
         policy.update_q(current_state, action, reward, next_state)
 
     # compute final portfolio worth
-    portfolio = budget + num_stocks* share_value
+    portfolio = budget + num_stocks * share_value
 
     if debug:
         print('${}\t{} shares'.format(budget, num_stocks))
@@ -63,7 +63,7 @@ def run_simu(policy, initial_budget, initial_num_stocks, prices, hist, debug=Fal
 
 
 def run_simus(policy, budget, num_stocks, prices, hist):
-    num_tries = 10
+    num_tries = 50
     final_portofolios = list()
 
     for i in xrange(num_tries):

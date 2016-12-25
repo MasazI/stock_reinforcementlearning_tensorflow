@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 from model_part import fc
 from decision_rand import DecisionPolicy
+from model import mlp
 import random
 
 class QLearningDecisionPolicy(DecisionPolicy):
@@ -24,10 +25,8 @@ class QLearningDecisionPolicy(DecisionPolicy):
         # hidden layer dimension
         h1_dim = 200
 
-        fc1 = fc('fc1', self.x, [input_dim, h1_dim], [h1_dim])
-
-        # neural network output is approximate of q function
-        self.q = fc('fc2', fc1, [h1_dim, output_dim], [output_dim])
+        # model inference
+        self.q = mlp("mlp0", self.x, input_dim, h1_dim, output_dim)
 
         # loss
         loss = tf.square(self.y - self.q)
