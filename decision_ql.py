@@ -45,6 +45,12 @@ class QLearningDecisionPolicy(DecisionPolicy):
         # saver
         self.saver = tf.train.Saver(tf.trainable_variables())
 
+        # laod model
+        ckpt = tf.train.get_checkpoint_state("train")
+        if ckpt and ckpt.model_checkpoint_path:
+            print("laod model: %s" % (ckpt.model_checkpoint_path))
+            self.saver.restore(self.sess, ckpt.model_checkpoint_path)
+
     def select_action(self, current_state, step):
         threshold = min(self.epsilon, step/1000.)
 

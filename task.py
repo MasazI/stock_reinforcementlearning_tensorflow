@@ -56,7 +56,8 @@ def run_simu(policy, initial_budget, initial_num_stocks, prices, hist, debug=Fal
     # compute final portfolio worth
     portfolio = budget + num_stocks * share_value
 
-    print('${}\t{} shares'.format(budget, num_stocks))
+    if debug:
+        print('${} budget\t{} shares'.format(budget, num_stocks))
 
     return portfolio
 
@@ -89,5 +90,5 @@ if __name__ == '__main__':
     num_tries = 50
     avg, std = run_simus(policy, budget, num_stocks, prices, hist, num_tries)
     policy.save_model("train", num_tries)
-    print("portfolio avg: %f, std: %f" % (avg, std))
+    print("portfolio avg: $%f, std: %f" % (avg, std))
     print("[training] finish")
