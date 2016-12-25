@@ -2,7 +2,8 @@
 import numpy as np
 import environment
 import util
-from decision import RandomDecisionPolicy
+from decision_rand import RandomDecisionPolicy
+from decision_ql import QLearningDecisionPolicy
 import tensorflow as tf
 import random
 
@@ -81,7 +82,8 @@ if __name__ == '__main__':
 
     actions = ["Buy", "Sell", "Hold"]
     hist = 200
-    policy = RandomDecisionPolicy(actions)
+    #policy = RandomDecisionPolicy(actions)
+    policy = QLearningDecisionPolicy(actions, hist+2)
 
     budget = 1000.0
     num_stocks = 0
