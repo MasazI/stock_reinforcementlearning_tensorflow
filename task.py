@@ -4,8 +4,7 @@ import environment
 import util
 from decision_rand import RandomDecisionPolicy
 from decision_ql import QLearningDecisionPolicy
-import tensorflow as tf
-import random
+from datetime import datetime as dt
 
 def run_simu(policy, initial_budget, initial_num_stocks, prices, hist, debug=False):
     # initializatin
@@ -74,21 +73,32 @@ def run_simus(policy, budget, num_stocks, prices, hist, num_tries):
 
 
 if __name__ == '__main__':
-    print("[training] start")
-    print("[loading data] start")
+    # simuration date
+    tstr = dt.now().strftime('%Y%m%d-%H%M%S')
+    print("%s [training] start" % tstr)
+
+    tstr = dt.now().strftime('%Y%m%d-%H%M%S')
+    print("%s [loading data] start" % tstr)
+
     prices = environment.get_prices('MSFT', '1992-07-22', '2016-07-22')
     util.plot_prices(prices)
-    print("[loading data] finish")
+
+    tstr = dt.now().strftime('%Y%m%d-%H%M%S')
+    print("%s [loading data] finish" % tstr)
 
     actions = ["Buy", "Sell", "Hold"]
     hist = 200
     #policy = RandomDecisionPolicy(actions)
-    policy = QLearningDecisionPolicy(actions, hist+2)
+    policy = QLearningDecisionPolicy(actions, hist+2, "train20161226-002008")
 
     budget = 1000.0
     num_stocks = 0
-    num_tries = 50
+    num_tries = 10
     avg, std = run_simus(policy, budget, num_stocks, prices, hist, num_tries)
-    policy.save_model("train", num_tries)
-    print("portfolio avg: $%f, std: %f" % (avg, std))
-    print("[training] finish")
+    policy.save_model("train%s" % tstr, num_tries)
+
+    tstr = dt.now().strftime('%Y%m%d-%H%M%S')
+    print("%s portfolio avg: $%f, std: %f" % (tstr, avg, std))
+
+    tstr = dt.now().strftime('%Y%m%d-%H%M%S')
+    print("%s [training] finish" % (tstr))

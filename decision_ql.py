@@ -8,7 +8,7 @@ import random
 from tensorflow.python.platform import gfile
 
 class QLearningDecisionPolicy(DecisionPolicy):
-    def __init__(self, actions, input_dim):
+    def __init__(self, actions, input_dim, model_dir):
         # select action function hyper-parameters
         self.epsilon = 0.9
         # q functins hyper-parameters
@@ -46,7 +46,7 @@ class QLearningDecisionPolicy(DecisionPolicy):
         self.saver = tf.train.Saver(tf.trainable_variables())
 
         # laod model
-        ckpt = tf.train.get_checkpoint_state("train")
+        ckpt = tf.train.get_checkpoint_state(model_dir)
         if ckpt and ckpt.model_checkpoint_path:
             print("laod model: %s" % (ckpt.model_checkpoint_path))
             self.saver.restore(self.sess, ckpt.model_checkpoint_path)
