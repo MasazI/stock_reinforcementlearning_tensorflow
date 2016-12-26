@@ -6,5 +6,5 @@ stock_reinforcementlearning_tensorflow is an implementation of Q-learning with s
 
 ---
 
-Copyright (c) 2015 Masahiro Imai
+Copyright (c) 2016 Masahiro Imai
 Released under the MIT license
